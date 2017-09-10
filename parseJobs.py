@@ -3,6 +3,7 @@
 import re
 import os
 import subprocess
+import time
 
 # Prepare REGEX for 'Error'
 errorRegex = re.compile(r'Error')
@@ -23,6 +24,7 @@ for line in tempFile:
             process = subprocess.Popen(bashCommand, shell=True)
             bashCommand = "jobsub_submit --expected-lifetime=36h --memory=1500MB --role=Analysis --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -G minos -g file:///pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM0d004/NueFitStandard/analysisjob.sh " + filesSearch[0][0] + " " + filesSearch[0][1] + " " + filesSearch[0][2] + " " + filesSearch[0][3] + " " + filesSearch[0][4]
             process = subprocess.Popen(bashCommand, shell=True)
+            time.sleep(5);
             # print(bashCommand)
     previousLine = line
 
