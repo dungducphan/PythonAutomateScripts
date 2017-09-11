@@ -111,4 +111,4 @@ def ParseCellID(cellID):
 if __name__ == '__main__':
     while (True):
         main()
-        time.sleep(5)
+        time.sleep(500)
