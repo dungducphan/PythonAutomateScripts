@@ -22,9 +22,9 @@ for line in tempFile:
             if (process.stdout.read() != ''):
                 pass
             else:
-                bashCommand = 'jobsub_submit --expected-lifetime=48h --memory=1350MB --role=Analysis --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -G minos -g file:///pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM' + dot2dRegex.sub('d', paramSearch[0]) + '/GridGenStandard/analysisjob.sh ' + paramSearch[0] + ' ' + paramSearch[1] + ' ' + paramSearch[2] + ' ' + str(i)
-                print(bashCommand)
-                # process = subprocess.Popen(bashCommand, shell=True)
-                # time.sleep(10)
+                bashCommand = 'jobsub_submit --expected-lifetime=48h --memory=1350MB --role=Analysis --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -G minos -g file:///pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM' + dot2dRegex.sub('d', str(float(paramSearch[0]))) + '/GridGenStandard/analysisjob.sh ' + paramSearch[0] + ' ' + paramSearch[1] + ' ' + paramSearch[2] + ' ' + str(i)
+                # print(bashCommand)
+                process = subprocess.Popen(bashCommand, shell=True)
+                time.sleep(10)
 
 tempFile.close()
