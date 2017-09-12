@@ -93,7 +93,7 @@ def UpdateValue(cellID, rowCount):
 
     values = [
         [
-            updatedGridGen, cellID[3], cellID[4], updatedNueFit
+            updatedGridGen, '=5*B'+str(rowCount), '=C'+str(rowCount)+'/D'+str(rowCount), updatedNueFit
         ]
     ]
 
