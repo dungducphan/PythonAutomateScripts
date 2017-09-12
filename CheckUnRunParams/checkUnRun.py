@@ -6,8 +6,9 @@ import re
 # Build check regex
 paramRegex = re.compile(r'\d.\d{4}')
 
-# Read job.out file
+# Initiate file objects
 tempFile = open('./listPoints.txt', 'r')
+listFile = open('./listPointsUnRun.txt', 'w')
 
 for line in tempFile:
     if 'str' in line:
@@ -19,6 +20,9 @@ for line in tempFile:
             bashCommand = 'ls ./Output/' + fileToCheck
             process = subprocess.Popen(bashCommand, shell=True, stdout = subprocess.PIPE)
             if (process.stdout.read() != ''):
-                print("File Not Found.")
+                pass
             else:
-                print("File Found.")
+                listFile.write(paramSearch[0] + ', ' + paramSearch[1] + ', ' + paramSearch[2] + ', ' + str(i) + '\n')
+
+tempFile.close()
+listFile.close()
