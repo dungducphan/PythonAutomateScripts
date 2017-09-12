@@ -53,21 +53,11 @@ def get_credentials():
     return credentials
 
 def main():
-    """Shows basic usage of the Sheets API.
-
-    Creates a Sheets API service object and prints the names and majors of
-    students in a sample spreadsheet:
-    https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-    """
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
     service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
-
-    """
-        Your code start here!
-    """
 
     # SpeadSheetID
     spreadsheetId = '1uT8k_ab_qyUaTMsuascYDpQcc9zonsR66mjtxm_lfRs'
@@ -84,23 +74,39 @@ def main():
     else:
         rowCount = 2;
         for row in values:
-            updateSheet = service.spreadsheets().values().update(
+            updateSheet = service.spreadsheets().values().batchUpdate(
                 spreadsheetId = spreadsheetId,
-                range = CellID(rowCount),
-                valueInputOption = 'USER_ENTERED',
-                body = UpdateValue(row[0])).execute()
+                body = UpdateValue(cellID = row, rowCount = rowCount)).execute()
             rowCount += 1
 
 def CellID(rowCount):
-    return 'CLEGO!F' + str(rowCount)
+    return 'CLEGO!C' + str(rowCount) + ':F' + str(rowCount)
 
-def UpdateValue(cellID):
-
-    bashCommand = "ssh -tq dphan@minos60.fnal.gov ls /pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM" + ParseCellID(cellID=cellID) + "/NueFitStandard/Output/ | wc -l"
+def UpdateValue(cellID, rowCount):
+    bashCommand = "ssh -tq dphan@minos60.fnal.gov ls /pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM" + ParseCellID(cellID=cellID[0]) + "/GridGenStandard/Output/gridfile_dm_" + cellID[0] + "*.root | wc -l"
     process = subprocess.Popen(bashCommand, shell=True, stdout = subprocess.PIPE)
+    updatedGridGen = process.stdout.read();
+
+    bashCommand = "ssh -tq dphan@minos60.fnal.gov ls /pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM" + ParseCellID(cellID=cellID[0]) + "/NueFitStandard/Output/ | wc -l"
+    process = subprocess.Popen(bashCommand, shell=True, stdout = subprocess.PIPE)
+    updatedNueFit = process.stdout.read();
+
+    values = [
+        [
+            updatedGridGen, cellID[3], cellID[4], updatedNueFit
+        ]
+    ]
+
+    data = [
+        {
+            'range': CellID(rowCount=rowCount),
+            'values': values
+        }
+    ]
 
     body = {
-        'values':[[process.stdout.read()]]
+        'valueInputOption': 'USER_ENTERED',
+        'data': data
     }
     return body
 
