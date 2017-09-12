@@ -5,10 +5,10 @@ import re
 
 # Build check regex
 paramRegex = re.compile(r'\d.\d{4}')
+dot2dRegex = re.compile(r'[.]')
 
 # Initiate file objects
 tempFile = open('./listPoints.txt', 'r')
-listFile = open('./listPointsUnRun.txt', 'w')
 
 for line in tempFile:
     if 'str' in line:
@@ -22,7 +22,9 @@ for line in tempFile:
             if (process.stdout.read() != ''):
                 pass
             else:
-                listFile.write(paramSearch[0] + ', ' + paramSearch[1] + ', ' + paramSearch[2] + ', ' + str(i) + '\n')
+                bashCommand = 'jobsub_submit --expected-lifetime=48h --memory=1350MB --role=Analysis --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -G minos -g file:///pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM' + dot2dRegex.sub('d', paramSearch[0]) + '/GridGenStandard/analysisjob.sh ' + paramSearch[0] + ' ' + paramSearch[1] + ' ' + paramSearch[2] + ' ' + str(i)
+                print(bashCommand)
+                # process = subprocess.Popen(bashCommand, shell=True)
+                # time.sleep(10)
 
 tempFile.close()
-listFile.close()
