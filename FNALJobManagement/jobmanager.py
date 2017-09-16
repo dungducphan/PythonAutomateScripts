@@ -83,11 +83,11 @@ def CellID(rowCount):
     return 'CLEGO!C' + str(rowCount) + ':F' + str(rowCount)
 
 def UpdateValue(cellID, rowCount):
-    bashCommand = "ssh -tq dphan@minos60.fnal.gov ls /pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM" + ParseCellID(cellID=cellID[0]) + "/GridGenStandard/Output/gridfile_dm_" + cellID[0] + "*.root | wc -l"
+    bashCommand = "ssh -tq dphan@minos60.fnal.gov ls /pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM" + ParseCellID(cellID=cellID[0]) + "/GridGenStandard/Output/gridfile_dm_" + cellID[0] + "*.root | wc -w"
     process = subprocess.Popen(bashCommand, shell=True, stdout = subprocess.PIPE)
     updatedGridGen = process.stdout.read();
 
-    bashCommand = "ssh -tq dphan@minos60.fnal.gov ls /pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM" + ParseCellID(cellID=cellID[0]) + "/NueFitStandard/Output/ | wc -l"
+    bashCommand = "ssh -tq dphan@minos60.fnal.gov ls /pnfs/minos/persistent/users/dphan/FeldmanCousinsAppearanceAnalysisDM" + ParseCellID(cellID=cellID[0]) + "/NueFitStandard/Output/ | wc -w"
     process = subprocess.Popen(bashCommand, shell=True, stdout = subprocess.PIPE)
     updatedNueFit = process.stdout.read();
 
