@@ -6,7 +6,7 @@ import subprocess
 import re
 import time
 
-from apiclient import discovery
+from googleapiclient import discovery
 from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
@@ -74,9 +74,7 @@ def main():
     else:
         rowCount = 2;
         for row in values:
-            updateSheet = service.spreadsheets().values().batchUpdate(
-                spreadsheetId = spreadsheetId,
-                body = UpdateValue(cellID = row, rowCount = rowCount)).execute()
+            updateSheet = service.spreadsheets().values().batchUpdate(spreadsheetId=spreadsheetId, body=UpdateValue(cellID=row, rowCount=rowCount)).execute()
             rowCount += 1
 
 def CellID(rowCount):
